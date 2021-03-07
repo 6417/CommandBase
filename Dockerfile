@@ -6,13 +6,20 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y gcc
 RUN apt-get install -y g++
 RUN apt-get install -y gdb
-RUN apt-get install -y cmake
 RUN apt-get install -y clang
 RUN apt-get install -y rsync
 RUN apt-get install -y tar
 RUN apt-get install -y python
 RUN apt-get install -y git
+RUN apt-get install -y software-properties-common
 RUN apt-get clean
+
+#install cmake 3.19.X
+RUN apt-get purge --auto-remove cmake
+RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
+RUN apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
+RUN apt-get update
+RUN apt-get install -y cmake
 
 RUN ( \
     echo 'LogLevel DEBUG2'; \
@@ -26,6 +33,7 @@ RUN useradd -m admin\
   && yes password | passwd admin
 RUN usermod -aG sudo admin
 
+#install gtest
 WORKDIR /usr/local/lib
 RUN git clone https://github.com/google/googletest
 WORKDIR /usr/local/lib/googletest

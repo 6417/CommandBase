@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+#include "pch.h"
 #include "CommandBase/library.h"
 
 TEST(helloWorld, test) {
@@ -8,6 +8,5 @@ TEST(helloWorld, test) {
 
 int main() {
     testing::InitGoogleTest();
-    RUN_ALL_TESTS();
-    return 0;
+    return RUN_ALL_TESTS();
 }
