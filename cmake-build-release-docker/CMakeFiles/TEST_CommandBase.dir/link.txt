@@ -1,0 +1,1 @@
+/usr/bin/clang++  -O3 -DNDEBUG   CMakeFiles/TEST_CommandBase.dir/test/main.cpp.o  -o TEST_CommandBase -Wl,-rpath,/usr/local/lib/googletest/build/lib libCommandBase.a /usr/local/lib/googletest/build/lib/libgtest.so 

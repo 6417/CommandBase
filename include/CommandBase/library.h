@@ -1,0 +1,6 @@
+#ifndef COMMANDBASE_LIBRARY_H
+#define COMMANDBASE_LIBRARY_H
+
+void hello();
+
+#endif //COMMANDBASE_LIBRARY_H
