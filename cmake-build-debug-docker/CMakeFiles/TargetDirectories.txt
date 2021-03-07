@@ -1,4 +1,0 @@
-/tmp/CommandBase-Build/cmake-build-debug-docker/CMakeFiles/rebuild_cache.dir
-/tmp/CommandBase-Build/cmake-build-debug-docker/CMakeFiles/edit_cache.dir
-/tmp/CommandBase-Build/cmake-build-debug-docker/CMakeFiles/CommandBase.dir
-/tmp/CommandBase-Build/cmake-build-debug-docker/CMakeFiles/TEST_CommandBase.dir
