@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 project(CommandBase)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 
 include_directories(src include)
 
@@ -9,7 +9,7 @@ set(SRC src/CommandBase/CommandBase.cpp src/CommandBase/CommandScheduler.cpp)
 
 set(HEAD include/CommandBase/CommandBase.h include/SubsystemBase/pch.h include/CommandBase/CommandScheduler.h)
 
-add_library(${PROJECT_NAME} ${HEAD} ${SRC})
+add_library(${PROJECT_NAME} STATIC ${HEAD} ${SRC})
 
 target_precompile_headers(${PROJECT_NAME} PUBLIC include/CommandBase/pch.h include/SubsystemBase/pch.h)
 

@@ -42,6 +42,10 @@ WORKDIR /usr/local/lib/googletest/build
 RUN cmake .. -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -DCMAKE_C_COMPILER=/usr/bin/clang -DBUILD_SHARED_LIBS=ON
 RUN make
 
+WORKDIR /tmp
+#RUN mkdir CommandBase
+#RUN chown admin:sudo
 COPY ./ /tmp/CommandBase
+RUN chown -R admin:sudo CommandBase
 
 CMD ["/usr/sbin/sshd", "-D", "-e", "-f", "/etc/ssh/sshd_config_test_clion"]

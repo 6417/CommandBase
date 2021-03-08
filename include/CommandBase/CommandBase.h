@@ -6,13 +6,9 @@
 namespace fridolinsRobotik
 {
     class CommandScheduler;
-
     class CommandBase
     {
-    private:
-        bool initialized = false;
     public:
-        bool hasBeenInitialized();
         virtual void initialize();
 
         virtual void execute();
@@ -20,6 +16,8 @@ namespace fridolinsRobotik
         virtual void end(bool interrupted);
 
         virtual bool isFinished();
+
+        ~CommandBase();
     };
 }
 

@@ -4,17 +4,22 @@
 #include "pch.h"
 
 #include "CommandBase/CommandBase.h"
+
 #include "CommandBase/CommandScheduler.h"
 
 namespace test
 {
     constexpr int numberOfExecutions = 10;
+    constexpr int numberOfCommands = 20;
+
     class TestCommand : public fridolinsRobotik::CommandBase
     {
     public:
         bool initializedCalled = false;
-        int executedCallCount = 0;
+        static int executedCallCount;
+        int m_executionCallCount = 0;
         bool endCalled = false;
+        bool interruptedEnd;
 
         void initialize() override;
 
@@ -23,14 +28,19 @@ namespace test
         void end(bool interrupted) override;
 
         bool isFinished() override;
+
+        ~TestCommand();
     };
 
     class CommandBaseTest : public testing::Test
     {
     public:
         TestCommand testCommand;
+        std::vector<TestCommand> commands;
 
         void SetUp() override;
+
+        void TearDown() override;
     };
 }
 
