@@ -12,6 +12,7 @@ RUN apt-get install -y tar
 RUN apt-get install -y python
 RUN apt-get install -y git
 RUN apt-get install -y software-properties-common
+RUN apt-get install -y valgrind
 RUN apt-get clean
 
 #install cmake 3.19.X
@@ -34,12 +35,16 @@ RUN useradd -m admin\
 RUN usermod -aG sudo admin
 
 #install gtest
-WORKDIR /usr/local/lib
+WORKDIR /home/lib
 RUN git clone https://github.com/google/googletest
-WORKDIR /usr/local/lib/googletest
+WORKDIR /home/lib/googletest
 RUN mkdir build
-WORKDIR /usr/local/lib/googletest/build
+WORKDIR /home/lib/googletest/build
 RUN cmake .. -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -DCMAKE_C_COMPILER=/usr/bin/clang -DBUILD_SHARED_LIBS=ON
 RUN make
+
+WORKDIR /home
+COPY ./ /home/CommandBase
+RUN chown -R admin:sudo CommandBase
 
 CMD ["/usr/sbin/sshd", "-D", "-e", "-f", "/etc/ssh/sshd_config_test_clion"]
