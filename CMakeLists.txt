@@ -17,12 +17,12 @@ set(TEST_SRC test/main.cpp test/CommandBaseTest.h test/CommandBaseTest.cpp)
 
 set(TEST_HEAD test/pch.h)
 
-set(TEST_LIB ${PROJECT_NAME} /usr/local/lib/googletest/build/lib/libgtest.so)
+set(TEST_LIB ${PROJECT_NAME} /home/lib/googletest/build/lib/libgtest.so)
 
 add_executable(TEST_${PROJECT_NAME} ${TEST_SRC} ${TEST_HEAD})
 
 target_include_directories(TEST_${PROJECT_NAME} PRIVATE
-		/usr/local/lib/googletest/googletest/include
+		/home/lib/googletest/googletest/include
 		)
 target_link_libraries(TEST_${PROJECT_NAME} ${TEST_LIB})
 

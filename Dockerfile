@@ -35,18 +35,16 @@ RUN useradd -m admin\
 RUN usermod -aG sudo admin
 
 #install gtest
-WORKDIR /usr/local/lib
+WORKDIR /home/lib
 RUN git clone https://github.com/google/googletest
-WORKDIR /usr/local/lib/googletest
+WORKDIR /home/lib/googletest
 RUN mkdir build
-WORKDIR /usr/local/lib/googletest/build
+WORKDIR /home/lib/googletest/build
 RUN cmake .. -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -DCMAKE_C_COMPILER=/usr/bin/clang -DBUILD_SHARED_LIBS=ON
 RUN make
 
-WORKDIR /tmp
-#RUN mkdir CommandBase
-#RUN chown admin:sudo
-COPY ./ /tmp/CommandBase
+WORKDIR /home
+COPY ./ /home/CommandBase
 RUN chown -R admin:sudo CommandBase
 
 CMD ["/usr/sbin/sshd", "-D", "-e", "-f", "/etc/ssh/sshd_config_test_clion"]
