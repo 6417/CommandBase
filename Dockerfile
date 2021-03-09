@@ -12,6 +12,7 @@ RUN apt-get install -y tar
 RUN apt-get install -y python
 RUN apt-get install -y git
 RUN apt-get install -y software-properties-common
+RUN apt-get install -y valgrind
 RUN apt-get clean
 
 #install cmake 3.19.X

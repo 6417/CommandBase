@@ -54,6 +54,7 @@ void fridolinsRobotik::CommandScheduler::cancelAll()
         if (hasBeenInitialized(command))
             command->end(true);
     runningCommands.clear();
+    scheduledCommands.clear();
 }
 
 void fridolinsRobotik::CommandScheduler::cancel(fridolinsRobotik::CommandBase* command)
@@ -66,5 +67,5 @@ void fridolinsRobotik::CommandScheduler::cancel(fridolinsRobotik::CommandBase* c
 
 bool fridolinsRobotik::CommandScheduler::isRunning(fridolinsRobotik::CommandBase* command)
 {
-    return runningCommands.find(command) != runningCommands.end();
+    return runningCommands.find(command) != runningCommands.end() || scheduledCommands.find(command) != scheduledCommands.end();
 }

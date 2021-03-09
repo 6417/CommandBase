@@ -110,3 +110,67 @@ TEST_F(CommandBaseTest, CancelAll_WillCallEndFunctionCorrectly)
     ASSERT_TRUE(testCommand.endCalled);
     ASSERT_TRUE(testCommand.interruptedEnd);
 }
+
+TEST_F(CommandBaseTest, CancelCommand_WillEndBeCalledCorrectly)
+{
+    fridolinsRobotik::CommandScheduler::getInstance().schedule(&testCommand);
+    fridolinsRobotik::CommandScheduler::getInstance().run();
+    fridolinsRobotik::CommandScheduler::getInstance().cancel(&testCommand);
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&testCommand));
+    ASSERT_TRUE(testCommand.endCalled);
+    ASSERT_TRUE(testCommand.interruptedEnd);
+}
+
+TEST_F(CommandBaseTest, DestructCommand_WillCommandBeCanceldInCommandScheduler)
+{
+    fridolinsRobotik::CommandBase* testCommandPtr;
+    {
+        TestCommand testCommandInScope{};
+        testCommandPtr = &testCommandInScope;
+        fridolinsRobotik::CommandScheduler::getInstance().schedule(&testCommandInScope);
+        fridolinsRobotik::CommandScheduler::getInstance().run();
+        ASSERT_TRUE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&testCommandInScope));
+    }
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(testCommandPtr));
+}
+
+TEST_F(CommandBaseTest, CommandSchedulerIsRunningAndHasBeenInitialized_WillReturnRightResults)
+{
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&testCommand));
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().hasBeenInitialized(&testCommand));
+    fridolinsRobotik::CommandScheduler::getInstance().schedule(&testCommand);
+    ASSERT_TRUE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&testCommand));
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().hasBeenInitialized(&testCommand));
+    fridolinsRobotik::CommandScheduler::getInstance().run();
+    ASSERT_TRUE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&testCommand));
+    ASSERT_TRUE(fridolinsRobotik::CommandScheduler::getInstance().hasBeenInitialized(&testCommand));
+    fridolinsRobotik::CommandScheduler::getInstance().cancel(&testCommand);
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&testCommand));
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().hasBeenInitialized(&testCommand));
+}
+
+TEST_F(CommandBaseTest, CommandSchedulerCancelAll_WillCancelAllCommandCancelCommandsCorrectly)
+{
+    TestCommand testCommand1{};
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&testCommand));
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().hasBeenInitialized(&testCommand));
+    fridolinsRobotik::CommandScheduler::getInstance().schedule(&testCommand);
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&testCommand1));
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().hasBeenInitialized(&testCommand1));
+    fridolinsRobotik::CommandScheduler::getInstance().schedule(&testCommand1);
+
+    ASSERT_TRUE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&testCommand));
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().hasBeenInitialized(&testCommand));
+    ASSERT_TRUE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&testCommand1));
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().hasBeenInitialized(&testCommand1));
+    fridolinsRobotik::CommandScheduler::getInstance().run();
+    ASSERT_TRUE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&testCommand));
+    ASSERT_TRUE(fridolinsRobotik::CommandScheduler::getInstance().hasBeenInitialized(&testCommand));
+    ASSERT_TRUE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&testCommand1));
+    ASSERT_TRUE(fridolinsRobotik::CommandScheduler::getInstance().hasBeenInitialized(&testCommand1));
+    fridolinsRobotik::CommandScheduler::getInstance().cancelAll();
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&testCommand));
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().hasBeenInitialized(&testCommand));
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&testCommand1));
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().hasBeenInitialized(&testCommand1));
+}
