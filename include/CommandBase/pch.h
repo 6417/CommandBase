@@ -1,9 +1,12 @@
 #ifndef COMMANDBASE_PCH_H
 #define COMMANDBASE_PCH_H
 
-#include <memory>
+#ifdef USE_STL
 #include <set>
-#include <algorithm>
+using std::set;
+#else
+#include "utilities/set.h"
+#endif
 
 #define RunningCommandsAllocator std::allocator<CommandBase*>
 

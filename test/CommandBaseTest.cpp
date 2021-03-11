@@ -1,4 +1,4 @@
-#include "CommandBaseTest.h"
+#include "test/CommandBaseTest.h"
 
 using namespace test;
 

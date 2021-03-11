@@ -1,7 +1,7 @@
 #ifndef COMMANDBASE_COMMANDBASETEST_H
 #define COMMANDBASE_COMMANDBASETEST_H
 
-#include "pch.h"
+#include "test/pch.h"
 
 #include "CommandBase/CommandBase.h"
 

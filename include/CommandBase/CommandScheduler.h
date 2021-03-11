@@ -3,19 +3,20 @@
 
 #include "CommandBase/pch.h"
 #include "CommandBase/CommandBase.h"
+#include "utilities/set.h"
 
 namespace fridolinsRobotik
 {
     class CommandScheduler
     {
     private:
-        std::set<CommandBase*> runningCommands;
-        std::set<CommandBase*> scheduledCommands;
+        set<CommandBase*> runningCommands;
+        set<CommandBase*> scheduledCommands;
 
-        void runCommand(CommandBase* command, std::set<CommandBase*>& finishedCommands);
+        void runCommand(CommandBase* command, set<CommandBase*>& finishedCommands);
 
         void endCommand(fridolinsRobotik::CommandBase* command,
-                        std::set<CommandBase*>& finishedCommands);
+                        set<CommandBase*>& finishedCommands);
 
     public:
         static CommandScheduler& getInstance();
