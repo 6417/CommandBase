@@ -1,6 +1,7 @@
 #include "test/CommandBaseTest.h"
 
 using namespace test;
+using fridolinsRobotik::CommandScheduler;
 
 int TestCommand::executedCallCount = 0;
 
@@ -175,4 +176,44 @@ TEST_F(CommandBaseTest, CommandSchedulerCancelAll_WillCancelAllCommandCancelComm
     ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().hasBeenInitialized(&testCommand));
     ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&testCommand1));
     ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().hasBeenInitialized(&testCommand1));
+}
+
+TEST_F(CommandBaseTest, CancelCommandThatsNotRunning)
+{
+    fridolinsRobotik::CommandScheduler::getInstance().cancel(&testCommand);
+    ASSERT_FALSE(testCommand.endCalled);
+    ASSERT_FALSE(testCommand.interruptedEnd);
+}
+
+TEST_F(CommandBaseTest, CancelCommandOnMemoryThatDoesntExist_WontCauseSIGSEV)
+{
+    auto* notExistingCommand = new TestCommand;
+    delete notExistingCommand;
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "DanglingPointers"
+    CommandScheduler::getInstance().schedule(notExistingCommand);
+    CommandScheduler::getInstance().schedule(nullptr);
+    ASSERT_TRUE(CommandScheduler::getInstance().isRunning(notExistingCommand));
+    ASSERT_TRUE(CommandScheduler::getInstance().isRunning(nullptr));
+    fridolinsRobotik::CommandScheduler::getInstance().cancel(notExistingCommand);
+    fridolinsRobotik::CommandScheduler::getInstance().cancel(nullptr);
+    ASSERT_FALSE(CommandScheduler::getInstance().isRunning(notExistingCommand));
+    ASSERT_FALSE(CommandScheduler::getInstance().isRunning(nullptr));
+#pragma clang diagnostic pop
+}
+
+TEST_F(CommandBaseTest, CancelAllCommandOnMemoryThatDoesntExist_WontCauseSIGSEV)
+{
+    auto* notExistingCommand = new TestCommand;
+    delete notExistingCommand;
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "DanglingPointers"
+    CommandScheduler::getInstance().schedule(notExistingCommand);
+    CommandScheduler::getInstance().schedule(nullptr);
+    ASSERT_TRUE(CommandScheduler::getInstance().isRunning(notExistingCommand));
+    ASSERT_TRUE(CommandScheduler::getInstance().isRunning(nullptr));
+    CommandScheduler::getInstance().cancelAll();
+    ASSERT_FALSE(CommandScheduler::getInstance().isRunning(notExistingCommand));
+    ASSERT_FALSE(CommandScheduler::getInstance().isRunning(nullptr));
+#pragma clang diagnostic pop
 }

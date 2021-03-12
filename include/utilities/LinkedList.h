@@ -133,7 +133,6 @@ void LinkedList<T>::push(T value)
 {
     pushEmptyElement();
     getLastElement().value = value;
-//    getLastElement().next = new Element<T>;
 }
 
 template<typename T>
@@ -274,6 +273,7 @@ void LinkedList<T>::erase(LinkedList::iterator it)
         return;
     if (it == iterator{firstElement})
     {
+        delete firstElement;
         firstElement = nullptr;
         size--;
         return;
@@ -291,7 +291,7 @@ void LinkedList<T>::erase(LinkedList::iterator it)
     if (before == iterator{nullptr})
         return;
     before.m_ptr->next = it.m_ptr->next;
-    delete &(*it);
+    delete it.m_ptr;
     size--;
 }
 
@@ -305,6 +305,8 @@ template<typename T>
 Element<T>& Element<T>::operator=(const Element<T>& e)
 {
     value = e.value;
+    delete next;
+    next = new Element<T>;
     *next = *e.next;
     return *this;
 }
@@ -313,6 +315,8 @@ template<typename T>
 Element<T>::Element(const Element<T>& e)
 {
     value = e.value;
+    delete next;
+    next = new Element<T>;
     *next = *e.next;
 }
 
@@ -320,6 +324,7 @@ template<typename T>
 Element<T>::Element(Element<T>&& e)
 {
     value = e.value;
+    delete next;
     next = e.next;
     e.next = nullptr;
 }
@@ -328,6 +333,7 @@ template<typename T>
 Element<T>& Element<T>::operator=(Element<T>&& e) noexcept
 {
     value = e.value;
+    delete next;
     next = e.next;
     e.next = nullptr;
     return *this;

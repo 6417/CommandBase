@@ -35,3 +35,40 @@ TEST_F(SetTest, EreaseElementNotInList)
     testSet.erase(1);
     ASSERT_EQ(testSet.getSize(), 0);
 }
+
+TEST_F(SetTest, FindElementWillReturnCorrectIterator)
+{
+    constexpr int valueToFind = -1;
+    for (int i = 0; i < 100; i++)
+        testSet.insert(i);
+    testSet.insert(valueToFind);
+    ASSERT_NE(testSet.find(valueToFind), testSet.end());
+    ASSERT_EQ(*testSet.find(valueToFind), valueToFind);
+}
+
+TEST_F(SetTest, FindElementWichIsNotInSetReturnEndIterator)
+{
+    constexpr int valueToFind = -1;
+    for (int i = 0; i < 100; i++)
+        testSet.insert(i);
+    ASSERT_EQ(testSet.find(valueToFind), testSet.end());
+}
+
+TEST_F(SetTest, ClearEmptySetWillSizeStillBeZero)
+{
+    testSet.clear();
+    ASSERT_EQ(testSet.getSize(), 0);
+}
+
+TEST_F(SetTest, BeginIteratorWillPointToFirstElement)
+{
+    constexpr int firstValue = 1;
+    testSet.insert(firstValue);
+    ASSERT_EQ(*testSet.begin(), firstValue);
+    ASSERT_EQ(&(*testSet.begin()), &testSet.getElementList()[0]);
+}
+
+TEST_F(SetTest, EmptySet_AreBeginAndEndIteratorsEqual)
+{
+    ASSERT_EQ(testSet.begin(), testSet.end());
+}
