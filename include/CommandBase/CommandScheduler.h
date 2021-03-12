@@ -7,11 +7,13 @@
 
 namespace fridolinsRobotik
 {
+    class SubsystemBase;
     class CommandScheduler
     {
     private:
         set<std::shared_ptr<CommandBase>> runningCommands;
         set<std::shared_ptr<CommandBase>> scheduledCommands;
+        set<SubsystemBase*> registeredSubsystem;
 
         void runCommand(const std::shared_ptr<CommandBase>& command, set<std::shared_ptr<CommandBase>>& finishedCommands);
 
@@ -32,6 +34,12 @@ namespace fridolinsRobotik
         bool hasBeenInitialized(std::shared_ptr<CommandBase> command);
 
         bool isRunning(const std::shared_ptr<CommandBase>& command);
+
+        void registerSubsystem(SubsystemBase* subsystem);
+
+        bool isSubsystemRegistered(SubsystemBase* subsystem);
+
+        void unregisterSubsystem(SubsystemBase* subsystemBase);
     };
 }
 

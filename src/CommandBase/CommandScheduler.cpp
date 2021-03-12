@@ -73,3 +73,19 @@ bool fridolinsRobotik::CommandScheduler::isRunning(const std::shared_ptr<Command
 {
     return runningCommands.find(command) != runningCommands.end() || scheduledCommands.find(command) != scheduledCommands.end();
 }
+
+void fridolinsRobotik::CommandScheduler::registerSubsystem(fridolinsRobotik::SubsystemBase *subsystem)
+{
+    registeredSubsystem.insert(subsystem);
+}
+
+bool fridolinsRobotik::CommandScheduler::isSubsystemRegistered(fridolinsRobotik::SubsystemBase *subsystem)
+{
+    return registeredSubsystem.find(subsystem) != registeredSubsystem.end();
+}
+
+void fridolinsRobotik::CommandScheduler::unregisterSubsystem(fridolinsRobotik::SubsystemBase *subsystemBase)
+{
+    registeredSubsystem.erase(subsystemBase);
+}
+
