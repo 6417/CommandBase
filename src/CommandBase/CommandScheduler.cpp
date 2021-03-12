@@ -8,8 +8,10 @@ fridolinsRobotik::CommandScheduler& fridolinsRobotik::CommandScheduler::getInsta
 
 void fridolinsRobotik::CommandScheduler::run()
 {
-    std::set < CommandBase * > finishedCommands;
+    set<CommandBase*> finishedCommands;
     for (auto& command : scheduledCommands) {
+        if (!command)
+            break;
         command->initialize();
         runningCommands.insert(command);
     }
@@ -26,7 +28,7 @@ void fridolinsRobotik::CommandScheduler::schedule(CommandBase* command)
 }
 
 void fridolinsRobotik::CommandScheduler::runCommand(fridolinsRobotik::CommandBase* command,
-                                                    std::set<CommandBase*>& finishedCommands)
+                                                    set<CommandBase*>& finishedCommands)
 {
     if (command->isFinished())
     {
@@ -37,7 +39,7 @@ void fridolinsRobotik::CommandScheduler::runCommand(fridolinsRobotik::CommandBas
 }
 
 void fridolinsRobotik::CommandScheduler::endCommand(fridolinsRobotik::CommandBase* command,
-                                                    std::set<CommandBase*>& finishedCommands)
+                                                    set<CommandBase*>& finishedCommands)
 {
     command->end(false);
     finishedCommands.insert(*runningCommands.find(command));
