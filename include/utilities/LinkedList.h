@@ -145,6 +145,7 @@ template<typename T>
 T LinkedList<T>::pop()
 {
     T retVal = getLastElement().value;
+    delete getLastElement();
     size--;
     return retVal;
 }

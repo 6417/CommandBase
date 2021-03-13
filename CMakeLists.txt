@@ -5,18 +5,18 @@ set(CMAKE_CXX_STANDARD 11)
 
 include_directories(src include)
 
-set(SRC src/CommandBase/CommandBase.cpp src/CommandBase/CommandScheduler.cpp src/utilities/set.cpp src/utilities/LinkedList.cpp)
+set(SRC src/CommandBase/CommandBase.cpp src/CommandBase/CommandScheduler.cpp src/utilities/set.cpp src/utilities/LinkedList.cpp src/CommandBase/CommandGroupBase.cpp src/CommandBase/SequentialCommandGroup.cpp src/CommandBase/ParallelCommandGroup.cpp)
 
-set(HEAD include/CommandBase/CommandBase.h include/SubsystemBase/pch.h include/CommandBase/CommandScheduler.h include/utilities/set.h include/utilities/LinkedList.h)
+set(HEAD include/CommandBase/CommandBase.h include/SubsystemBase/pch.h include/CommandBase/CommandScheduler.h include/utilities/set.h include/utilities/LinkedList.h include/CommandBase/CommandGroupBase.h include/CommandBase/SequentialCommandGroup.h include/CommandBase/ParallelCommandGroup.h)
 
 # add_compile_definitions(USE_STL)
 add_library(${PROJECT_NAME} STATIC ${HEAD} ${SRC})
 
 target_precompile_headers(${PROJECT_NAME} PUBLIC include/CommandBase/pch.h include/SubsystemBase/pch.h)
 
-set(TEST_SRC test/main.cpp test/CommandBaseTest.cpp test/utilities/setTest.cpp)
+set(TEST_SRC test/main.cpp test/CommandBaseTest.cpp test/utilities/setTest.cpp test/SequentialCommandGroupTest.cpp test/ParallelCommandGroupTest.cpp)
 
-set(TEST_HEAD test/pch.h test/CommandBaseTest.h test/utilities/setTest.h)
+set(TEST_HEAD test/pch.h test/CommandBaseTest.h test/utilities/setTest.h test/SequentialCommandGroupTest.h test/ParallelCommandGroupTest.h)
 
 set(TEST_LIB ${PROJECT_NAME} /home/lib/googletest/build/lib/libgtest.so)
 

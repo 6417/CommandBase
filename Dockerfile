@@ -13,7 +13,6 @@ RUN apt-get install -y python
 RUN apt-get install -y git
 RUN apt-get install -y software-properties-common
 RUN apt-get install -y valgrind
-RUN apt-get install -y gcc-avr binutils-avr avr-libc
 RUN apt-get clean
 
 #install cmake 3.19.X
