@@ -10,28 +10,28 @@ namespace fridolinsRobotik
     class CommandScheduler
     {
     private:
-        set<CommandBase*> runningCommands;
-        set<CommandBase*> scheduledCommands;
+        set<std::shared_ptr<CommandBase>> runningCommands;
+        set<std::shared_ptr<CommandBase>> scheduledCommands;
 
-        void runCommand(CommandBase* command, set<CommandBase*>& finishedCommands);
+        void runCommand(const std::shared_ptr<CommandBase>& command, set<std::shared_ptr<CommandBase>>& finishedCommands);
 
-        void endCommand(fridolinsRobotik::CommandBase* command,
-                        set<CommandBase*>& finishedCommands);
+        void endCommand(const std::shared_ptr<fridolinsRobotik::CommandBase>& command,
+                        set<std::shared_ptr<CommandBase>>& finishedCommands);
 
     public:
         static CommandScheduler& getInstance();
 
         void run();
 
-        void schedule(CommandBase* command);
+        void schedule(std::shared_ptr<CommandBase> command);
 
         void cancelAll();
 
-        void cancel(CommandBase* command);
+        void cancel(const std::shared_ptr<CommandBase>& command);
 
-        bool hasBeenInitialized(CommandBase* command);
+        bool hasBeenInitialized(std::shared_ptr<CommandBase> command);
 
-        bool isRunning(CommandBase* command);
+        bool isRunning(const std::shared_ptr<CommandBase>& command);
     };
 }
 

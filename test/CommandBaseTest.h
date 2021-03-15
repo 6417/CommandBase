@@ -35,13 +35,16 @@ namespace test
     class CommandBaseTest : public testing::Test
     {
     public:
-        TestCommand testCommand;
+        std::shared_ptr<TestCommand> testCommand;
         std::vector<TestCommand> commands;
 
         void SetUp() override;
 
         void TearDown() override;
     };
+
+    template<typename T>
+    std::shared_ptr<T> make_stack_pointer(T* ptr);
 }
 
 #endif //COMMANDBASE_COMMANDBASETEST_H

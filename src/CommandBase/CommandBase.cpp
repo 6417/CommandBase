@@ -23,5 +23,5 @@ bool fridolinsRobotik::CommandBase::isFinished()
 
 fridolinsRobotik::CommandBase::~CommandBase()
 {
-    fridolinsRobotik::CommandScheduler::getInstance().cancel(this);
+    fridolinsRobotik::CommandScheduler::getInstance().cancel(std::shared_ptr<CommandBase>(this, [](CommandBase*) {}));
 }

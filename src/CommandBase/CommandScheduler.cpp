@@ -1,3 +1,5 @@
+#include <memory>
+#include <utility>
 #include "CommandBase/CommandScheduler.h"
 
 fridolinsRobotik::CommandScheduler& fridolinsRobotik::CommandScheduler::getInstance()
@@ -8,7 +10,7 @@ fridolinsRobotik::CommandScheduler& fridolinsRobotik::CommandScheduler::getInsta
 
 void fridolinsRobotik::CommandScheduler::run()
 {
-    set<CommandBase*> finishedCommands;
+    set<std::shared_ptr<CommandBase>> finishedCommands;
     for (auto& command : scheduledCommands) {
         if (!command)
             break;
@@ -22,13 +24,13 @@ void fridolinsRobotik::CommandScheduler::run()
         runningCommands.erase(finishedCommand);
 }
 
-void fridolinsRobotik::CommandScheduler::schedule(CommandBase* command)
+void fridolinsRobotik::CommandScheduler::schedule(std::shared_ptr<CommandBase> command)
 {
-    scheduledCommands.insert(command);
+    scheduledCommands.insert(std::move(command));
 }
 
-void fridolinsRobotik::CommandScheduler::runCommand(fridolinsRobotik::CommandBase* command,
-                                                    set<CommandBase*>& finishedCommands)
+void fridolinsRobotik::CommandScheduler::runCommand(const std::shared_ptr<fridolinsRobotik::CommandBase>& command,
+                                                    set<std::shared_ptr<CommandBase>>& finishedCommands)
 {
     if (command->isFinished())
     {
@@ -38,16 +40,16 @@ void fridolinsRobotik::CommandScheduler::runCommand(fridolinsRobotik::CommandBas
     command->execute();
 }
 
-void fridolinsRobotik::CommandScheduler::endCommand(fridolinsRobotik::CommandBase* command,
-                                                    set<CommandBase*>& finishedCommands)
+void fridolinsRobotik::CommandScheduler::endCommand(const std::shared_ptr<fridolinsRobotik::CommandBase>& command,
+                                                    set<std::shared_ptr<CommandBase>>& finishedCommands)
 {
     command->end(false);
     finishedCommands.insert(*runningCommands.find(command));
 }
 
-bool fridolinsRobotik::CommandScheduler::hasBeenInitialized(fridolinsRobotik::CommandBase* command)
+bool fridolinsRobotik::CommandScheduler::hasBeenInitialized(std::shared_ptr<fridolinsRobotik::CommandBase> command)
 {
-    return runningCommands.find(command) != runningCommands.end();
+    return runningCommands.find(std::move(command)) != runningCommands.end();
 }
 
 void fridolinsRobotik::CommandScheduler::cancelAll()
@@ -59,7 +61,7 @@ void fridolinsRobotik::CommandScheduler::cancelAll()
     scheduledCommands.clear();
 }
 
-void fridolinsRobotik::CommandScheduler::cancel(fridolinsRobotik::CommandBase* command)
+void fridolinsRobotik::CommandScheduler::cancel(const std::shared_ptr<fridolinsRobotik::CommandBase>& command)
 {
     if (hasBeenInitialized(command))
         command->end(true);
@@ -67,7 +69,7 @@ void fridolinsRobotik::CommandScheduler::cancel(fridolinsRobotik::CommandBase* c
     scheduledCommands.erase(command);
 }
 
-bool fridolinsRobotik::CommandScheduler::isRunning(fridolinsRobotik::CommandBase* command)
+bool fridolinsRobotik::CommandScheduler::isRunning(const std::shared_ptr<CommandBase>& command)
 {
     return runningCommands.find(command) != runningCommands.end() || scheduledCommands.find(command) != scheduledCommands.end();
 }
