@@ -9,8 +9,8 @@ namespace fridolinsRobotik
     class ParallelRaceCommandGroup : public CommandGroupBase
     {
     private:
-        std::vector<CommandBase*> activeCommands;
-        std::vector<CommandBase*>::iterator currentCommandIt;
+        std::vector<std::shared_ptr<CommandBase>> activeCommands;
+        std::vector<std::shared_ptr<CommandBase>>::iterator currentCommandIt;
         bool firstCommandFinished;
         void endAllCommands();
     public:

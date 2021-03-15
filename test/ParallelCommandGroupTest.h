@@ -31,8 +31,8 @@ namespace test::parallelCommandGroup
     class ParallelCommandGroupTest : public testing::Test
     {
     public:
-        TestCommand* command1;
-        TestCommand* command2;
+        std::shared_ptr<TestCommand> command1;
+        std::shared_ptr<TestCommand> command2;
         TestParallelCommandGroup commandGroup;
 
         void SetUp() override;

@@ -2,5 +2,5 @@
 
 fridolinsRobotik::CommandGroupBase::CommandGroupBase()
 {
-    commandsList = std::vector<CommandBase*>();
+    commandsList = std::vector<std::shared_ptr<CommandBase>>();
 }

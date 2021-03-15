@@ -32,8 +32,8 @@ namespace test::raceCommandGroupTest
     class ParallelRaceCommandGroupTest : public testing::Test
     {
     public:
-        TestCommand* command1;
-        TestCommand* command2;
+        std::shared_ptr<TestCommand> command1;
+        std::shared_ptr<TestCommand> command2;
         TestParallelRaceCommandGroup commandGroup;
 
         void SetUp() override;

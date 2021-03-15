@@ -10,7 +10,7 @@ namespace fridolinsRobotik
     {
     private:
         //Iterator<CommandBase*> runningCommandIt;
-        std::vector<CommandBase*>::iterator runningCommandIt;
+        std::vector<std::shared_ptr<CommandBase>>::iterator runningCommandIt;
         bool finished = false;
     public:
         void initialize() override;

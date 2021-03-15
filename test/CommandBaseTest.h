@@ -42,9 +42,6 @@ namespace test
 
         void TearDown() override;
     };
-
-    template<typename T>
-    std::shared_ptr<T> make_stack_pointer(T* ptr);
 }
 
 #endif //COMMANDBASE_COMMANDBASETEST_H

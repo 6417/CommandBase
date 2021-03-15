@@ -43,24 +43,24 @@ void SequentialCommandGroupTest::TearDown()
 TEST_F(SequentialCommandGroupTest, CommandsCorrectlyAdded)
 {
     ASSERT_TRUE(commandGroup.getNumCommands() == 0);
-    commandGroup.addCommands<2>(std::array<CommandBase*, 2>{&command1, &command2});
+    commandGroup.addCommands<2>({test::make_stack_pointer(&command1), test::make_stack_pointer(&command2)});
     ASSERT_TRUE(commandGroup.getNumCommands() == 2);
 }
 
 TEST_F(SequentialCommandGroupTest, CommandGroupCorrectlyInitialized)
 {
-    commandGroup.addCommands<2>(std::array<CommandBase*, 2>{&command1, &command2});
-    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&commandGroup));
-    fridolinsRobotik::CommandScheduler::getInstance().schedule(&commandGroup);
+    commandGroup.addCommands<2>({test::make_stack_pointer(& command1), test::make_stack_pointer(& command2)});
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(test::make_stack_pointer(&commandGroup)));
+    fridolinsRobotik::CommandScheduler::getInstance().schedule(test::make_stack_pointer(&commandGroup));
     fridolinsRobotik::CommandScheduler::getInstance().run();
     ASSERT_TRUE(command1.isInitialized);
 }
 
 TEST_F(SequentialCommandGroupTest, CommandGroupSchedulingCommandsCorrectly)
 {
-    commandGroup.addCommands<2>(std::array<CommandBase*, 2>{&command1, &command2});
-    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(&commandGroup));
-    fridolinsRobotik::CommandScheduler::getInstance().schedule(&commandGroup);
+    commandGroup.addCommands<2>({test::make_stack_pointer(&command1), test::make_stack_pointer(&command2)});
+    ASSERT_FALSE(fridolinsRobotik::CommandScheduler::getInstance().isRunning(test::make_stack_pointer(&commandGroup)));
+    fridolinsRobotik::CommandScheduler::getInstance().schedule(test::make_stack_pointer(&commandGroup));
     for (int i = 0; i < 10; i++)
     {
         CommandScheduler::getInstance().run();
@@ -79,8 +79,8 @@ TEST_F(SequentialCommandGroupTest, CommandGroupSchedulingCommandsCorrectly)
 
 TEST_F(SequentialCommandGroupTest, CommandGroupCorrectlyFinished)
 {
-    commandGroup.addCommands<2>(std::array<CommandBase*, 2>{&command1, &command2});
-    CommandScheduler::getInstance().schedule(&commandGroup);
+    commandGroup.addCommands<2>({test::make_stack_pointer(&command1), test::make_stack_pointer(&command2)});
+    CommandScheduler::getInstance().schedule(test::make_stack_pointer(&commandGroup));
     for (int i = 0; i < 20; i++)
     {
         CommandScheduler::getInstance().run();
@@ -91,5 +91,5 @@ TEST_F(SequentialCommandGroupTest, CommandGroupCorrectlyFinished)
     ASSERT_TRUE(command2.isFinished());
     ASSERT_TRUE(commandGroup.isFinished());
     CommandScheduler::getInstance().run();
-    ASSERT_FALSE(CommandScheduler::getInstance().isRunning(&commandGroup));
+    ASSERT_FALSE(CommandScheduler::getInstance().isRunning(test::make_stack_pointer(& commandGroup)));
 }

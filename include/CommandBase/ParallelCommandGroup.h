@@ -9,8 +9,8 @@ namespace fridolinsRobotik
     class ParallelCommandGroup : public CommandGroupBase
     {
     private:
-        std::vector<CommandBase*> activeCommands;
-        std::vector<CommandBase*>::iterator currentCommandIt;
+        std::vector<std::shared_ptr<CommandBase>> activeCommands;
+        std::vector<std::shared_ptr<CommandBase>>::iterator currentCommandIt;
     public:
         unsigned int getNumCommands();
         void initialize() override;
