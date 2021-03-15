@@ -3,5 +3,4 @@
 fridolinsRobotik::CommandGroupBase::CommandGroupBase()
 {
     commandsList = std::vector<CommandBase*>();
-    currentCommandIndex = -1;
 }

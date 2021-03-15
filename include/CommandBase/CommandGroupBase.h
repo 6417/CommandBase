@@ -12,7 +12,6 @@ namespace fridolinsRobotik
     {
     protected:
         std::vector<CommandBase*> commandsList;
-        int currentCommandIndex = 0;
     public:
         CommandGroupBase();
 
