@@ -3,7 +3,14 @@
 
 #include <set>
 #include <memory>
+#include <optional>
+#include "SubsystemBase/pch.h"
 
-#define RunningCommandsAllocator std::allocator<CommandBase*>
+namespace fridolinsRobotik
+{
+    class CommandBase;
+
+    class CommandScheduler;
+}
 
 #endif //COMMANDBASE_PCH_H

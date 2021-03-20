@@ -3,24 +3,15 @@
 
 #include <gtest/gtest.h>
 #include "CommandBase/pch.h"
-
-template<typename T>
-class AllocTest : public std::allocator<T>
+#include <memory>
+namespace test
 {
-public:
-    typename std::allocator_traits<std::allocator<T>>::pointer allocate(typename std::allocator_traits<std::allocator<T>>::size_type count)
+    template<typename T>
+    std::shared_ptr<T> make_stack_pointer(T* ptr)
     {
-        std::cout << "allocated: " << count << std::endl;
-        return std::allocator<T>::allocate(count);
+        return std::shared_ptr<T>(ptr, [](T*)
+        {});
     }
-
-    void deallocate(typename std::allocator_traits<std::allocator<T>>::pointer p, typename std::allocator_traits<std::allocator<T>>::size_type count) {
-        std::cout << "allocated: " << count << std::endl;
-        std::allocator<T>::deallocate(p, count);
-    }
-};
-
-#undef RunningCommandsAllocator
-#define RunningCommandsAllocator AllocTest<fridolinsRobotik::CommandBase*>
+}
 
 #endif //TEST_PCH_H

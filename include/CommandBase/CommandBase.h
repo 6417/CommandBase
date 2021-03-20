@@ -5,9 +5,18 @@
 
 namespace fridolinsRobotik
 {
-    class CommandScheduler;
     class CommandBase
     {
+    private:
+
+        std::set<std::shared_ptr<SubsystemBase>> requirements;
+
+    protected:
+
+        void addRequirements(std::shared_ptr<SubsystemBase> subsystem);
+
+        void addRequirements(std::set<std::shared_ptr<SubsystemBase>> subsystems);
+
     public:
         virtual void initialize();
 
@@ -17,7 +26,11 @@ namespace fridolinsRobotik
 
         virtual bool isFinished();
 
+        bool hasRequirements();
+
         ~CommandBase();
+
+        std::set<std::shared_ptr<fridolinsRobotik::SubsystemBase>> getRequirements();
     };
 }
 

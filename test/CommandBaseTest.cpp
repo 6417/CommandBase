@@ -1,15 +1,8 @@
 #include "test/CommandBaseTest.h"
 
 using namespace test;
-using fridolinsRobotik::CommandScheduler;
 
 int TestCommand::executedCallCount = 0;
-
-template<typename T>
-std::shared_ptr<T> test::make_stack_pointer(T* ptr)
-{
-    return std::shared_ptr<T>(ptr, [](T*) {});
-}
 
 void test::CommandBaseTest::SetUp()
 {

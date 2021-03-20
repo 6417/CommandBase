@@ -5,11 +5,10 @@ set(CMAKE_CXX_STANDARD 11)
 
 include_directories(src include)
 
-set(SRC src/CommandBase/CommandBase.cpp src/CommandBase/CommandScheduler.cpp src/utilities/set.cpp src/utilities/LinkedList.cpp src/SubsystemBase/SubsystemBase.cpp)
+set(SRC src/CommandBase/CommandBase.cpp src/CommandBase/CommandScheduler.cpp src/utilities/set.cpp src/utilities/LinkedList.cpp src/SubsystemBase/SubsystemBase.cpp src/SubsystemBase/SubsystemBase.cpp)
 
-set(HEAD include/CommandBase/CommandBase.h include/SubsystemBase/pch.h include/CommandBase/CommandScheduler.h include/utilities/set.h include/utilities/LinkedList.h src/SubsystemBase/SubsystemBase.cpp)
+set(HEAD include/CommandBase/CommandBase.h include/SubsystemBase/pch.h include/CommandBase/CommandScheduler.h include/utilities/set.h include/utilities/LinkedList.h include/CommandBase/pch.h)
 
-# add_compile_definitions(USE_STL)
 add_library(${PROJECT_NAME} STATIC ${HEAD} ${SRC})
 
 target_precompile_headers(${PROJECT_NAME} PUBLIC include/CommandBase/pch.h include/SubsystemBase/pch.h)
@@ -29,4 +28,3 @@ target_include_directories(TEST_${PROJECT_NAME} PRIVATE
 target_link_libraries(TEST_${PROJECT_NAME} ${TEST_LIB})
 
 target_precompile_headers(TEST_${PROJECT_NAME} PRIVATE test/pch.h)
-

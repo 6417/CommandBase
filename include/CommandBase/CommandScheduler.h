@@ -1,24 +1,29 @@
 #ifndef COMMANDBASE_COMMANDSCHEDULER_H
 #define COMMANDBASE_COMMANDSCHEDULER_H
 
+
 #include "CommandBase/pch.h"
 #include "CommandBase/CommandBase.h"
-#include "utilities/set.h"
+#include "SubsystemBase/SubsystemBase.h"
 
 namespace fridolinsRobotik
 {
-    class SubsystemBase;
+    using namespace std;
     class CommandScheduler
     {
     private:
-        set<std::shared_ptr<CommandBase>> runningCommands;
-        set<std::shared_ptr<CommandBase>> scheduledCommands;
-        set<SubsystemBase*> registeredSubsystem;
+        std::set<std::shared_ptr<CommandBase>> runningCommands;
+        std::set<std::shared_ptr<CommandBase>> scheduledCommands;
+        std::set<std::shared_ptr<SubsystemBase>> registeredSubsystems;
+        std::map<std::shared_ptr<SubsystemBase>, std::optional<std::shared_ptr<CommandBase>> runningCommandsWithRequrements;
 
         void runCommand(const std::shared_ptr<CommandBase>& command, set<std::shared_ptr<CommandBase>>& finishedCommands);
 
         void endCommand(const std::shared_ptr<fridolinsRobotik::CommandBase>& command,
                         set<std::shared_ptr<CommandBase>>& finishedCommands);
+
+        void runAllDefaultCommands();
+
 
     public:
         static CommandScheduler& getInstance();
@@ -31,15 +36,15 @@ namespace fridolinsRobotik
 
         void cancel(const std::shared_ptr<CommandBase>& command);
 
-        bool hasBeenInitialized(std::shared_ptr<CommandBase> command);
+        bool hasBeenInitialized(const std::shared_ptr<CommandBase>& command);
 
         bool isRunning(const std::shared_ptr<CommandBase>& command);
 
-        void registerSubsystem(SubsystemBase* subsystem);
+        void registerSubsystem(const std::shared_ptr<SubsystemBase>& subsystem);
 
-        bool isSubsystemRegistered(SubsystemBase* subsystem);
+        bool isSubsystemRegistered(const std::shared_ptr<SubsystemBase>& subsystem);
 
-        void unregisterSubsystem(SubsystemBase* subsystemBase);
+        void unregisterSubsystem(const std::shared_ptr<SubsystemBase>& subsystem);
     };
 }
 

@@ -1,6 +1,5 @@
 #ifndef COMMANDBASE_COMMANDBASETEST_H
 #define COMMANDBASE_COMMANDBASETEST_H
-
 #include "test/pch.h"
 
 #include "CommandBase/CommandBase.h"
@@ -42,9 +41,6 @@ namespace test
 
         void TearDown() override;
     };
-
-    template<typename T>
-    std::shared_ptr<T> make_stack_pointer(T* ptr);
 }
 
 #endif //COMMANDBASE_COMMANDBASETEST_H
