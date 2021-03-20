@@ -10,7 +10,8 @@ void fridolinsRobotik::CommandScheduler::run()
 {
     set<std::shared_ptr<CommandBase>> finishedCommands;
     runAllDefaultCommands();
-    for (auto& command : scheduledCommands) {
+    for (auto& command : scheduledCommands)
+    {
         if (!command)
             break;
         command->initialize();
@@ -20,12 +21,24 @@ void fridolinsRobotik::CommandScheduler::run()
     for (auto& command : runningCommands)
         runCommand(command, finishedCommands);
     for (auto& finishedCommand : finishedCommands)
+    {
         runningCommands.erase(finishedCommand);
+        for (const auto& subsystem : registeredSubsystems)
+            if (runningCommandsWithRequirements[subsystem].get() == finishedCommand.get())
+                runningCommandsWithRequirements[subsystem] = nullptr;
+    }
 }
 
-void fridolinsRobotik::CommandScheduler::schedule(std::shared_ptr<CommandBase> command)
+void fridolinsRobotik::CommandScheduler::schedule(const std::shared_ptr<CommandBase>& command)
 {
-    scheduledCommands.insert(std::move(command));
+    scheduledCommands.insert(command);
+    if (command->hasRequirements())
+        for (const auto& requiredSubsystem : command->getRequirements())
+        {
+            if (runningCommandsWithRequirements[requiredSubsystem].get())
+                cancel(runningCommandsWithRequirements[requiredSubsystem]);
+            runningCommandsWithRequirements[requiredSubsystem] = command;
+        }
 }
 
 void fridolinsRobotik::CommandScheduler::runCommand(const std::shared_ptr<fridolinsRobotik::CommandBase>& command,
@@ -46,7 +59,8 @@ void fridolinsRobotik::CommandScheduler::endCommand(const std::shared_ptr<fridol
     finishedCommands.insert(*runningCommands.find(command));
 }
 
-bool fridolinsRobotik::CommandScheduler::hasBeenInitialized(const std::shared_ptr<fridolinsRobotik::CommandBase>& command)
+bool
+fridolinsRobotik::CommandScheduler::hasBeenInitialized(const std::shared_ptr<fridolinsRobotik::CommandBase>& command)
 {
     return runningCommands.find(command) != runningCommands.end();
 }
@@ -66,16 +80,21 @@ void fridolinsRobotik::CommandScheduler::cancel(const std::shared_ptr<fridolinsR
         command->end(true);
     runningCommands.erase(command);
     scheduledCommands.erase(command);
+    for (const auto& subsystem : registeredSubsystems)
+        if (runningCommandsWithRequirements[subsystem].get() == command.get())
+            runningCommandsWithRequirements[subsystem] = nullptr;
 }
 
 bool fridolinsRobotik::CommandScheduler::isRunning(const std::shared_ptr<CommandBase>& command)
 {
-    return runningCommands.find(command) != runningCommands.end() || scheduledCommands.find(command) != scheduledCommands.end();
+    return runningCommands.find(command) != runningCommands.end() ||
+           scheduledCommands.find(command) != scheduledCommands.end();
 }
 
 void fridolinsRobotik::CommandScheduler::registerSubsystem(const std::shared_ptr<SubsystemBase>& subsystem)
 {
     registeredSubsystems.insert(subsystem);
+    runningCommandsWithRequirements[subsystem] = nullptr;
 }
 
 bool fridolinsRobotik::CommandScheduler::isSubsystemRegistered(const std::shared_ptr<SubsystemBase>& subsystem)
@@ -85,16 +104,18 @@ bool fridolinsRobotik::CommandScheduler::isSubsystemRegistered(const std::shared
 
 void fridolinsRobotik::CommandScheduler::unregisterSubsystem(const std::shared_ptr<SubsystemBase>& subsystem)
 {
+    runningCommandsWithRequirements.erase(subsystem);
     registeredSubsystems.erase(subsystem);
 }
 
 void fridolinsRobotik::CommandScheduler::runAllDefaultCommands()
 {
-    for(auto& subsystem : registeredSubsystems)
+    for (auto& subsystem : registeredSubsystems)
     {
-        for(auto& command : subsystem->getDefaultCommands())
+        for (auto& command : subsystem->getDefaultCommands())
         {
-            schedule(command);
+            if (!runningCommandsWithRequirements[subsystem].get())
+                schedule(command);
         }
     }
 }

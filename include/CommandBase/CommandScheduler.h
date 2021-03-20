@@ -15,7 +15,7 @@ namespace fridolinsRobotik
         std::set<std::shared_ptr<CommandBase>> runningCommands;
         std::set<std::shared_ptr<CommandBase>> scheduledCommands;
         std::set<std::shared_ptr<SubsystemBase>> registeredSubsystems;
-        std::map<std::shared_ptr<SubsystemBase>, std::optional<std::shared_ptr<CommandBase>> runningCommandsWithRequrements;
+        std::map<std::shared_ptr<SubsystemBase>, std::shared_ptr<CommandBase>> runningCommandsWithRequirements;
 
         void runCommand(const std::shared_ptr<CommandBase>& command, set<std::shared_ptr<CommandBase>>& finishedCommands);
 
@@ -30,7 +30,7 @@ namespace fridolinsRobotik
 
         void run();
 
-        void schedule(std::shared_ptr<CommandBase> command);
+        void schedule(const std::shared_ptr<CommandBase>& command);
 
         void cancelAll();
 
